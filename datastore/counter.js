@@ -46,12 +46,12 @@ const writeCounter = (count, callback) => {
 //Your first goal is to save the current state of the counter to the hard drive, so it's persisted between server restarts. Do this by rewriting getNextUniqueId to make use of the provided readCounter and writeCounter functions.
 // run readCounter then whatever that returns add one then add it to writeCounter
 exports.getNextUniqueId = (callback) => { //getting the next unique id for the counter, decalring a function
-  console.log('counter before',counter )
+
   readCounter((err, data) => {
     writeCounter(data + 1, (err, dataString) => {
-        callback(err, dataString);
-    })
-  })
+      callback(err, dataString);
+    });
+  });
   // counter = counter + 1; //reassign the counter to be counter+1
   // return zeroPaddedNumber(counter); // return the counter as the zeroPaddedNumber
 };
