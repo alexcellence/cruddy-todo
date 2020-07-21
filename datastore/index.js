@@ -7,10 +7,30 @@ var items = {};
 
 // Public API - Fix these CRUD functions ///////////////////////////////////////
 
+// need to make async, fs.writeFile
 exports.create = (text, callback) => {
-  var id = counter.getNextUniqueId();
-  items[id] = text;
-  callback(null, { id, text });
+  // use fs.writeFile takes three parameters: name of new file (getNextUniqueID), data in file (text), callback
+  // this won't work
+
+  counter.getNextUniqueId((err, dataString)=> {
+    if(err) {
+      throw err;
+    }
+    //handle err, if data
+    fs.writeFile(`${dataDir}/${dataString}.txt`, text, (err, todo)=>{
+      if(err) {
+        throw err;
+      }
+      callback(err, todo);
+    })
+  })
+
+  // var id = counter.getNextUniqueId();//get data from nextUniqueId
+  // items[id] = text; // fs.writeFile()
+  // callback(null, { id, text }); //handle error, if not save data
+  // });
+  // items[id] = text;
+  // callback(null, { id, text });
 };
 
 exports.readAll = (callback) => {
@@ -54,8 +74,10 @@ exports.delete = (id, callback) => {
 
 exports.dataDir = path.join(__dirname, 'data');
 
+//review existsSync & mkdirSync
 exports.initialize = () => {
   if (!fs.existsSync(exports.dataDir)) {
     fs.mkdirSync(exports.dataDir);
   }
 };
+

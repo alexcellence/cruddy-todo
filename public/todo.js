@@ -36,6 +36,9 @@ window.Todo = {
     });
   },
 
+
+  // Todo.update(id, updatedText, changeTodo.bind(null, id)); ********************
+
   // Update (crUd) -- member
   update: function(id, text, callback) {
     return $.ajax({

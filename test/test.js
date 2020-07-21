@@ -79,6 +79,7 @@ describe('todos', () => {
     });
 
     it('should use the generated unique id as the filename', (done) => {
+      console.log('THIS IS DATADIR', todos.dataDir);
       fs.writeFileSync(counter.counterFile, '00142');
       todos.create('buy fireworks', (err, todo) => {
         const todoExists = fs.existsSync(path.join(todos.dataDir, '00143.txt'));
