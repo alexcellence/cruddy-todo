@@ -83,9 +83,9 @@ exports.readOne = (id, callback) => {
         }
       }
     }
-  })
-    // find an object with the given id
-    // in callback function give (null, object)
+  });
+  // find an object with the given id
+  // in callback function give (null, object)
 
   //----------------------------------------
   // var text = items[id];//find the object that has the given id in the storage
@@ -97,13 +97,31 @@ exports.readOne = (id, callback) => {
 };
 
 exports.update = (id, text, callback) => {
-  var item = items[id];
-  if (!item) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    items[id] = text;
-    callback(null, { id, text });
-  }
+
+  //readOne item using this id
+  exports.readOne(id, (err, item)=>{
+    if (err) {
+      callback(err, null);
+    } else {
+      fs.writeFile(`${exports.dataDir}/${id}.txt`, text, (err)=>{
+        if (err) {
+          callback(err, null);
+        } else {
+          callback(err, {text: text.toString(), id: id});
+        }
+      })
+    }
+  })
+  //if we have the item, we want to change the text to the given text using
+  //else throw error
+  /*--------------------------*/
+  // var item = items[id];
+  // if (!item) {
+  //   callback(new Error(`No item with id: ${id}`));
+  // } else {
+  //   items[id] = text;
+  //   callback(null, { id, text });
+  // }
 };
 
 exports.delete = (id, callback) => {
