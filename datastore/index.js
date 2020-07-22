@@ -51,9 +51,9 @@ exports.readAll = (callback) => {
       } else {
 
         var todoList = _.map(files, (text, id)=>{
-          var fileName = path.basename(text, ".txt")
-          return {id: fileName, text: fileName}
-        })
+          var fileName = path.basename(text, '.txt');
+          return {id: fileName, text: fileName};
+        });
         // var todoList = _.map(files, (file) => {
         // /
         //   console.log('file is', file)
@@ -65,46 +65,35 @@ exports.readAll = (callback) => {
       }
     }
   });
-
-
-
-  // //if dataDir has lengthOf 0,
-  // if (exports.dataDir.length === 0) {
-  //   //error first callback function with (err, [])
-  //   callback(err, []);
-  // } else {
-  //   //else we will readFile and run error first callback function
-  //   fs.readFile(`${exports.dataDir}`, (err, todoList) => {
-  //     if (err) {
-  //       throw err;
-  //     } else {
-  //       // with the acquired data, transform it to the correct spec.
-  //       var list = _.map(todoList, (text, id) => {
-  //         return {id: id, text: id};
-  //       })
-  //       callback(err, list);
-  //     }
-  //   })
-  // }
-  //
-
-  //-----------------------------------------------
-  //decalring a variable data = mapping over the item object,
-  // var data = _.map(items, (text, id) => {
-  //   return { id, text };
-  // [{id: '0', text: '0'},{id: '1', text: '1'}, {id: '2', text: '2'}]
-  //});
-
-  // callback(null, data);
 };
 
 exports.readOne = (id, callback) => {
-  var text = items[id];
-  if (!text) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback(null, { id, text });
-  }
+  // first we want to read all files
+  exports.readAll((err, todoList) => {
+    if (err) {
+      callback(err, null);
+    } else {
+      // iterate through the list of files
+      for (let i = 0; i < todoList.length; i++) {
+        if (todoList[i].id === id) {
+          var text = todoList[i].text;
+          callback(null, {id, text});
+        } else {
+          callback(err, null);
+        }
+      }
+    }
+  })
+    // find an object with the given id
+    // in callback function give (null, object)
+
+  //----------------------------------------
+  // var text = items[id];//find the object that has the given id in the storage
+  // if (!text) { // if we don't have it, we throw error
+  //   callback(new Error(`No item with id: ${id}`));
+  // } else { // else we send that given id and found text to the callback function
+  //   callback(null, { id, text });
+  // }
 };
 
 exports.update = (id, text, callback) => {
