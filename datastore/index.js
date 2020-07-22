@@ -24,9 +24,9 @@ exports.create = (text, callback) => {
           //create an object literal using text variable
           callback(err, {text: text.toString(), id: dataString});
         }
-      })
+      });
     }
-  })
+  });
 
   // var id = counter.getNextUniqueId();//get data from nextUniqueId
   // items[id] = text; // fs.writeFile()
@@ -43,24 +43,28 @@ exports.create = (text, callback) => {
 //readAll is a function that takes a callback function as a parameter.
 exports.readAll = (callback) => {
   fs.readdir(`${exports.dataDir}`, (err, files)=>{
-    if(err) {
+    if (err) {
       callback(err, null);
     } else {
-      if(files.length === 0){
+      if (files.length === 0) {
         callback(err, []);
-      }else {
+      } else {
 
-        var todoList = _.map(files, (file) => {
-          fs.readFile(file, (err, data)=>{
-        console.log('data is ', data)
-        console.log('file is ', file)
-            return {id: file, text: file};
-          })
+        var todoList = _.map(files, (text, id)=>{
+          var fileName = path.basename(text, ".txt")
+          return {id: fileName, text: fileName}
         })
+        // var todoList = _.map(files, (file) => {
+        // /
+        //   console.log('file is', file)
+        //   fs.readFile(`${exports.dataDir}/${fileName}.txt`, (err, data)=>{
+        //     return {id: fileName, text: fileName};
+        //   });
+        // });
         callback(err, todoList);
       }
     }
-  })
+  });
 
 
 
@@ -88,8 +92,8 @@ exports.readAll = (callback) => {
   //decalring a variable data = mapping over the item object,
   // var data = _.map(items, (text, id) => {
   //   return { id, text };
-    // [{id: '0', text: '0'},{id: '1', text: '1'}, {id: '2', text: '2'}]
-  // });
+  // [{id: '0', text: '0'},{id: '1', text: '1'}, {id: '2', text: '2'}]
+  //});
 
   // callback(null, data);
 };
